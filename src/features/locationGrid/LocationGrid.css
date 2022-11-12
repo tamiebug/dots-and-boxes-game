@@ -1,0 +1,69 @@
+.dotsGrid {
+  /* Properties Defined in React
+  --move-dot-size-ratio
+  --dot-radius
+  --dots-grid-size
+  --number-dots
+  --dots-grid-separation
+  */
+  
+  /* Derived Custom Properties */
+  --dot-size: calc(var(--dot-radius) * 2);
+  
+  /* Regular Properties */
+  width: var(--size);
+  height: var(--size);
+  border: none;
+  position: relative;
+  display: inline-block;
+}
+
+.dotsGridLocation {
+  --move-width: calc(var(--dot-size) * var(--move-dot-size-ratio));
+  position: relative;
+  height: var(--dots-grid-separation);
+  width: var(--dots-grid-separation);
+  border: none;
+}
+
+.dotsGridLocation:last-child {
+  width: var(--dot-size);
+}
+
+.dotsGridRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.dotsGridRow:last-child > .dotsGridLocation {
+  height: var(--dot-size);
+}
+.dot {
+  height: var(--dot-size);
+  width: var(--dot-size);
+  background-color: #000;
+  border-radius: 50%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.horizontalMove {
+  z-index: -2;
+  position: absolute;
+  left: var(--dot-radius);
+  top: calc(var(--dot-radius) - ( var(--move-width) / 2 ));
+  height: var(--move-width);
+  width: var(--dots-grid-separation);
+  background-color: #dc143c;
+}
+
+.verticalMove {
+  z-index: -2;
+  position: absolute;
+  left: calc(var(--dot-radius) - ( var(--move-width) / 2 ));
+  top: var(--move-width);
+  height: var(--dots-grid-separation);
+  width: var(--move-width);
+  background-color: #dc143c;
+}
