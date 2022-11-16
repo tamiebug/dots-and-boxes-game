@@ -1,18 +1,20 @@
 .dotsGrid {
-  /* Properties Defined in React
-  --move-dot-size-ratio
-  --dot-radius
-  --dots-grid-size
+  /* Custom Properties Defined in React
   --number-dots
-  --dots-grid-separation
   */
-  
+
+  /* Component-Wide CSS Custom Properties */
+  --dot-radius: 0.625em;
+  --move-dot-size-ratio: 0.5;   /* Ratio of width of line indicating move between two dots to width of said dots */
+  --playing-area-size: 92vmin;
+
   /* Derived Custom Properties */
-  --dot-size: calc(var(--dot-radius) * 2);
-  
+  --dot-size: calc(var(--dot-radius) * 2); 
+  --dots-grid-separation: calc((var(--playing-area-size) - (2 * var(--dot-radius))) / (var(--number-dots) - 1));
+
   /* Regular Properties */
-  width: var(--size);
-  height: var(--size);
+  width: var(--playing-area-size);
+  height: var(--playing-area-size);
   border: none;
   position: relative;
   display: inline-block;
@@ -38,14 +40,26 @@
 .dotsGridRow:last-child > .dotsGridLocation {
   height: var(--dot-size);
 }
+
 .dot {
   height: var(--dot-size);
   width: var(--dot-size);
   background-color: #000;
   border-radius: 50%;
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
+}
+
+.dotSelectionArea {
+  --click-area-radius: calc(var(--dots-grid-separation) * .40);
+  position: absolute;
+  height: calc(var(--click-area-radius) * 2);
+  width: calc(var(--click-area-radius) * 2);
+  border-radius: 50%;
+  position: absolute;
+  left: calc(var(--dot-radius) - var(--click-area-radius));
+  top: calc(var(--dot-radius) - var(--click-area-radius));
 }
 
 .horizontalMove {
