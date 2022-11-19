@@ -4,11 +4,8 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { attemptMove, selectLocationGrid, LocationState } from './locationGridSlice';
 import './LocationGrid.css';
 
-interface LocationGridConfigs {
-  dotClickThresholdRatio: number;
-};
 
-export function LocationGrid(props: LocationGridConfigs) {
+export function LocationGrid() {
   const locationGrid = useAppSelector(selectLocationGrid);
   const [mouseLastHeldDownAt, setMouseLastHeldDownAt] = useState<[number, number] | null>(null)
 
@@ -18,7 +15,7 @@ export function LocationGrid(props: LocationGridConfigs) {
     if( type === 'down' ) {
       return function handleMouseDownEvent(e: MouseEvent<HTMLDivElement>) {
         e.preventDefault();
-        if (mouseLastHeldDownAt) return;
+        //if (mouseLastHeldDownAt) return;
         setMouseLastHeldDownAt([x, y]);
       }
     }
@@ -39,7 +36,7 @@ export function LocationGrid(props: LocationGridConfigs) {
   }
 
   return (
-    <div className="dotsGrid" style={returnDotsGridStyle(props, locationGrid.size)} data-testid="DotsGrid">
+    <div className="dotsGrid" data-testid="DotsGrid">
       {[...Array(locationGrid.size)].map( (_, y) => 
         <div className="dotsGridRow" key={y}>
           {[...Array(locationGrid.size)].map( (_, x) => returnLocationStateHTML(locationGrid.gridLocations[y][x], x, y, createMouseEventHandler))}
@@ -47,12 +44,6 @@ export function LocationGrid(props: LocationGridConfigs) {
       )}
     </div>
   )
-}
-
-function returnDotsGridStyle(props: LocationGridConfigs, numberDots: number) {
-  return {
-    "--number-dots": `${numberDots}`,
-  } as React.CSSProperties;
 }
 
 type mouseEventHandlerCreatorType = (type: 'up'|'down', x: number, y: number) => ((event: MouseEvent<HTMLDivElement>) => void) | undefined;
@@ -63,7 +54,7 @@ function returnLocationStateHTML(locationState: LocationState, x: number, y: num
       onDragStart={ e => e.preventDefault() } 
       onMouseDown={ mouseEventHandlerCreator('down', x, y) }
       onMouseUp={ mouseEventHandlerCreator('up', x, y) }
-      key={1} 
+      key={5} 
       data-testid={`clickArea[${[x,y]}]`}/> 
   ];
   

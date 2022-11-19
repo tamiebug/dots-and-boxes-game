@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <LocationGrid dotClickThresholdRatio={.66}/>
+      <LocationGrid/>
     </div>
   );
 }

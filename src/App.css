@@ -1,6 +1,26 @@
 .App {
-  text-align: center;
+  --max-board-size: 11;
+  --playing-area-size: 92vmin;
+
+  width: 100%;
+  height: 100vh;
   box-sizing: border-box;
+  font-size: calc(var(--playing-area-size) / ((6 * var(--max-board-size)) + 1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.App > div {
+  padding: 1.5em;
+  height: var(--playing-area-size);
+  border-radius: 1em;
+}
+
+body, html {
+  /* override user-agent settings to allow for proper setting of height of .App */
+  margin: 0;
+  padding: 0;
 }
 
 *, ::before, ::after {

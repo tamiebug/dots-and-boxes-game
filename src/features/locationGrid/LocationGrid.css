@@ -1,49 +1,43 @@
 .dotsGrid {
-  /* Custom Properties Defined in React
-  --number-dots
-  */
+  --move-dot-size-ratio: 0.5;
 
-  /* Component-Wide CSS Custom Properties */
-  --dot-radius: 0.625em;
-  --move-dot-size-ratio: 0.5;   /* Ratio of width of line indicating move between two dots to width of said dots */
-  --playing-area-size: 92vmin;
-
-  /* Derived Custom Properties */
-  --dot-size: calc(var(--dot-radius) * 2); 
-  --dots-grid-separation: calc((var(--playing-area-size) - (2 * var(--dot-radius))) / (var(--number-dots) - 1));
-
-  /* Regular Properties */
-  width: var(--playing-area-size);
-  height: var(--playing-area-size);
-  border: none;
-  position: relative;
-  display: inline-block;
+  aspect-ratio: 1;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
 }
 
 .dotsGridLocation {
-  --move-width: calc(var(--dot-size) * var(--move-dot-size-ratio));
+  --move-width: calc(1em * var(--move-dot-size-ratio));
   position: relative;
-  height: var(--dots-grid-separation);
-  width: var(--dots-grid-separation);
-  border: none;
+  flex-grow: 1;
 }
 
 .dotsGridLocation:last-child {
-  width: var(--dot-size);
+  width: 1em;
+  flex-grow: 0;
 }
 
 .dotsGridRow {
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.dotsGridRow:last-child {
+  height: 1em;
+  flex-grow: 0;
 }
 
 .dotsGridRow:last-child > .dotsGridLocation {
-  height: var(--dot-size);
+  height: 1em;
 }
 
 .dot {
-  height: var(--dot-size);
-  width: var(--dot-size);
+  z-index: 2;
+  height: 1em;
+  width: 1em;
   background-color: #000;
   border-radius: 50%;
   position: absolute;
@@ -52,32 +46,31 @@
 }
 
 .dotSelectionArea {
-  --click-area-radius: calc(var(--dots-grid-separation) * .40);
+  z-index: 3;
   position: absolute;
-  height: calc(var(--click-area-radius) * 2);
-  width: calc(var(--click-area-radius) * 2);
+  height: 8em;
+  width: 8em;
   border-radius: 50%;
-  position: absolute;
-  left: calc(var(--dot-radius) - var(--click-area-radius));
-  top: calc(var(--dot-radius) - var(--click-area-radius));
+  left: -3.5em;
+  top: -3.5em;
 }
 
 .horizontalMove {
-  z-index: -2;
+  z-index: 1;
   position: absolute;
-  left: var(--dot-radius);
-  top: calc(var(--dot-radius) - ( var(--move-width) / 2 ));
-  height: var(--move-width);
-  width: var(--dots-grid-separation);
+  left: .5em;
+  top: calc(.5em - ( var(--move-width) / 2 ));
+  height: var(--move-width); 
+  width: 100%;
   background-color: #dc143c;
 }
 
 .verticalMove {
-  z-index: -2;
+  z-index: 1;
   position: absolute;
-  left: calc(var(--dot-radius) - ( var(--move-width) / 2 ));
+  left: calc(.5em - ( var(--move-width) / 2 ));
   top: var(--move-width);
-  height: var(--dots-grid-separation);
+  height: 100%;
   width: var(--move-width);
   background-color: #dc143c;
 }
