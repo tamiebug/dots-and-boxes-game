@@ -4,7 +4,6 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { attemptMove, selectLocationGrid, LocationState } from './locationGridSlice';
 import './LocationGrid.css';
 
-
 export function LocationGrid() {
   const locationGrid = useAppSelector(selectLocationGrid);
   const [mouseLastHeldDownAt, setMouseLastHeldDownAt] = useState<[number, number] | null>(null)
@@ -15,7 +14,6 @@ export function LocationGrid() {
     if( type === 'down' ) {
       return function handleMouseDownEvent(e: MouseEvent<HTMLDivElement>) {
         e.preventDefault();
-        //if (mouseLastHeldDownAt) return;
         setMouseLastHeldDownAt([x, y]);
       }
     }
@@ -39,7 +37,7 @@ export function LocationGrid() {
     <div className="dotsGrid" data-testid="DotsGrid">
       {[...Array(locationGrid.size)].map( (_, y) => 
         <div className="dotsGridRow" key={y}>
-          {[...Array(locationGrid.size)].map( (_, x) => returnLocationStateHTML(locationGrid.gridLocations[y][x], x, y, createMouseEventHandler))}
+          {[...Array(locationGrid.size)].map( (_, x) => returnLocationStateHTML(locationGrid.gridLocations[y][x], x, y, locationGrid.size, createMouseEventHandler))}
         </div>
       )}
     </div>
@@ -47,16 +45,31 @@ export function LocationGrid() {
 }
 
 type mouseEventHandlerCreatorType = (type: 'up'|'down', x: number, y: number) => ((event: MouseEvent<HTMLDivElement>) => void) | undefined;
-function returnLocationStateHTML(locationState: LocationState, x: number, y: number, mouseEventHandlerCreator: mouseEventHandlerCreatorType): ReactElement {
-  let children: ReactElement[] = [
-    <span className="dot" key={0} onDragStart={ e => e.preventDefault() } data-testid={`dot[${[x,y]}]`}/>,
-    <div className="dotSelectionArea" 
+function returnLocationStateHTML(locationState: LocationState, x: number, y: number, boardSize: number, mouseEventHandlerCreator: mouseEventHandlerCreatorType): ReactElement {
+
+  function createSelectionArea(x: number, y: number, key: number = 5, additionalClasses: string[] = []): ReactElement {
+    return <div className={ ["dotSelectionArea"].concat(additionalClasses).join(' ') }
       onDragStart={ e => e.preventDefault() } 
       onMouseDown={ mouseEventHandlerCreator('down', x, y) }
       onMouseUp={ mouseEventHandlerCreator('up', x, y) }
-      key={5} 
+      key={ key }
       data-testid={`clickArea[${[x,y]}]`}/> 
-  ];
+  }
+
+  let children: ReactElement[] = [<span className="dot" key={0} onDragStart={ e => e.preventDefault() } data-testid={`dot[${[x,y]}]`}/>];
+
+  /* NOTE: Last row and column of dotsGridLocation's are sized differently by CSS for the sake of layout calcs
+   * However, this also affects the sizes of the dotSelectionArea's.  Hence, the second-to-last row & columns,
+   * which are normally sized, will also contain the dotSelectionAreas for the last row/column, translated over
+   * so that they are properly placed, through the use of the classes nextOneRight and nextOneDown.
+   */
+
+  if (x < (boardSize - 1) && y < (boardSize - 1)) {
+    children.push(createSelectionArea(x, y));
+    if (x === (boardSize - 2) && y === (boardSize - 2)) children.push(createSelectionArea(x+1, y+1, 6, ['nextOneRight', 'nextOneDown']));
+    if (x === (boardSize - 2)) children.push(createSelectionArea(x+1, y  , 7, ['nextOneRight']));
+    if (y === (boardSize - 2)) children.push(createSelectionArea(x  , y+1, 8, ['nextOneDown']));
+  }
   
   if ( locationState.horizontalLine === 'player1') {
     children.push(<div className="horizontalMove player1" key={1}></div>);

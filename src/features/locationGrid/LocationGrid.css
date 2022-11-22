@@ -48,11 +48,20 @@
 .dotSelectionArea {
   z-index: 3;
   position: absolute;
-  height: 8em;
-  width: 8em;
+  height: 80%;
+  width: 80%;
   border-radius: 50%;
-  left: -3.5em;
-  top: -3.5em;
+  left: calc(.5em - 40%);
+  top: calc(.5em - 40%);
+  border: 1px black solid;
+}
+
+.dotSelectionArea.nextOneRight {
+  left: calc(.5em - 40% + 100%);
+}
+
+.dotSelectionArea.nextOneDown {
+  top: calc(.5em - 40% + 100%); 
 }
 
 .horizontalMove {
